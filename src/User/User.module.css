@@ -1,0 +1,9 @@
+.cotainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn {
+  width: 40px;
+}

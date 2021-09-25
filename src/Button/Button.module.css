@@ -1,0 +1,19 @@
+.ghost {
+  font-size: 14px;
+  padding: 8px 12px;
+  background: none;
+  border-radius: 4px;
+  border: 1px solid rgba(16, 24, 40, 0.5);
+  color: rgba(16, 24, 40, 0.6);
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.ghost:hover {
+  background: rgba(16, 24, 40, 0.2);
+  color: rgba(16, 24, 40, 1);
+}
+
+.primary {
+}

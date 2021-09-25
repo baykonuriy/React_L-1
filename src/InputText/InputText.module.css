@@ -1,0 +1,31 @@
+.InputText {
+  padding: 8px 12px;
+  min-width: 280px;
+  border: 1px solid rgba(16, 25, 41, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  color: #101828;
+  transition: border 0.3s;
+}
+
+.InputText:hover {
+  border: 1px solid rgba(16, 25, 41, 0.6);
+  box-shadow: -1px 2px 8px -3px rgba(34, 60, 80, 0.2);
+}
+
+.InputText:focus {
+  outline: none;
+  border: 1px solid blue;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #101828;
+}

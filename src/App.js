@@ -1,86 +1,114 @@
-import React, { Component } from 'react';
-import './App.css';
-import Message from './Message/Message'
+import React, {useState, useEffect, useRef} from "react"
+import {InputText} from './InputText/InputText'
+import {Button} from "./Button/Button"
+import {Message} from './Message/Message'
+import './App.css'
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <h1>Hello</h1>
-//     </div>
-//   );
-// }
+function App(){
+  let [messageList, setMessageList] = useState([])
+  let [allMessage, setAllMessage] = useState([])
+  let [textMessage, setTextMessage] = useState('')
+  let [autorName, setAutorName] = useState('')
+  let publishedMesssageList = messageList
 
-class App extends Component {
-  state = {
-    text: 'Empty text message',
-    myMess: []
-  }
-
-  handleInput = (e) => {
-    // console.log('Changed', e.target.value)
-    this.setState({
-      text: e.target.value
-    })
-  }
-
-  addMessage = () => {
-    let arr = this.state.myMess
-    let m = 
+  const robot = useRef(
     {
-      date: String(new Date()),
-      text: this.state.text,
+      text: 'TextMessage',
+      autor: 'Robot',
+      date: String(new Date())
     }
-    arr.unshift(m)
-    this.setState({
-      myMess: arr,
-    })
+  )
+
+  function getUserText(event){
+    setTextMessage(textMessage = event.target.value)
   }
 
-  render() {
-    const headline = {
-      textAlign: "center",
-      display: "block",
-      width: "100%",
-      fontSize: "24px",
-      margin: "60px auto"
-    }
-    const container = {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
-    }
-    // const theDate = this.state.date
-    // const theText = this.state.text
-    const myMess = this.state.myMess
-
-    let messages = []
-    if (myMess.length > 0) {
-      messages = myMess.map((elem, index) => {
-        return (
-          <Message
-            text={elem.text}
-            date={elem.date}
-            key={index} />
-        )
-      })
-    }
-    return (
-      <div style={container}>
-        <h1 style={headline}>Headline</h1>
-        <input
-          style={{ marginBottom: "10px" }}
-          type="text" onChange={this.handleInput} />
-        <button
-          style={{ width: "80px" }}
-          onClick={this.addMessage}
-        >
-          To publish
-        </button>
-        {messages}
-      </div >
-
-    );
+  function getUserName(event){
+    setAutorName(autorName = event.target.value)
   }
+
+  function addMessage(){
+    setMessageList(messageList.concat(
+      {
+        text: textMessage,
+        autor: autorName,
+        date: String(new Date())
+      }))
+      setAutorName(autorName = '')
+      setTextMessage(textMessage = '')
+  }
+
+
+  function removeMessage(item){
+    setAllMessage(allMessage = allMessage.filter(elem=>{
+      return elem !== item
+    }))
+    setMessageList(messageList = messageList.filter(elem=>{
+      return elem !== item
+    }))
+    publishedMesssageList = allMessage
+  }
+
+ 
+
+  useEffect(()=>{
+    if(messageList.length > 0 && messageList[messageList.length - 1].autor !== 'Robot'){
+
+      setAllMessage(allMessage = publishedMesssageList)
+      robot.current.text = `Hi ${messageList[messageList.length - 1].autor}, some textMessage`
+      publishedMesssageList.push(robot.current)
+
+      //   ПОЧЕМУ ЭТОТ SETTIMEOUT НЕ ОБНОВЛЯЕТ СТЕЙТ?
+      //   setTimeout(()=>{
+      //         robot.current.text = `Hi ${messageList[messageList.length - 1].autor}, some textMessage`
+      //         publishedMesssageList.push(robot.current)
+      //         setAllMessage((allMessage)=>{
+      //         return allMessage = publishedMesssageList
+      //       })
+      //       console.log('publishedMesssageList', publishedMesssageList)
+      //       console.log('robot.current', robot.current)
+      //       console.log('messageList', messageList)
+      //       console.log('allMessage', allMessage)
+      //   }, 3000)
+    }
+  }, [messageList])
+
+  return(
+    <div className="container">
+      <InputText
+        value={autorName}
+        placeholder={'Write a name'}
+        title={'You name'}
+        forOrId={'message'}
+        inputHandle={getUserName}/>
+      <InputText
+        value={textMessage}
+        placeholder={'Write a message'}
+        title={'You message: '}
+        forOrId={'message'}
+        inputHandle={getUserText}/>
+      <Button
+        title="To publish"
+        name="ghost"
+        clickHandler={addMessage}/>
+        { 
+          allMessage.map((elem, idx)=>{
+            return(
+              <Message
+                userName={elem.autor}
+                userText={elem.text}
+                date={elem.date}
+                key={idx}
+                removeItem={()=>removeMessage(elem)}
+                />
+            )
+          })
+        }
+       
+    </div> 
+  )
+
 }
 
-export default App;
+export default App
+
